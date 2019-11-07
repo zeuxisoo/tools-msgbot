@@ -15,6 +15,6 @@ $telegram->addCommands([
 ]);
 
 //
-$useWebHook = $config['telegram']['web_hook'];
+$useWebHook = $config['telegram']['webhook']['enable'];
 
 $update = $telegram->commandsHandler($useWebHook);
