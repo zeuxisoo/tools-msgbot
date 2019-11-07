@@ -22,7 +22,7 @@ $action   = getRequest('action');
 // Flow
 switch($action) {
     case 'send-message':
-        sendMessage();
+        sendMessage($telegram);
         break;
     default:
         echo "Unknown action";
@@ -30,11 +30,14 @@ switch($action) {
 }
 
 // Action
-function sendMessage() {
+function sendMessage($telegram) {
     $chatId  = getRequest('chatId');
     $message = getRequest('message');
 
-    // TODO: send message to chatId with message
+    $telegram->sendMessage([
+        'chat_id' => $chatId,
+        'text'    => $message,
+    ]);
 
     echo json_encode([
         'ok'      => true,
