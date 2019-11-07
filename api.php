@@ -5,13 +5,13 @@ require_once dirname(__FILE__).'/vendor/autoload.php';
 use Telegram\Bot\Api;
 
 // Refill
-$_POST = json_decode(file_get_contents("php://input"), true);
+$_POST = json_decode(file_get_contents("php://input"), true) ?? [];
 
 // Helper
 function getRequest($name) {
     $request = array_merge($_GET, $_POST);
 
-    return $request[$name] ?? $request[$name];
+    return $request[$name] ?? "";
 }
 
 // Global variables
@@ -23,6 +23,12 @@ $action   = getRequest('action');
 switch($action) {
     case 'send-message':
         sendMessage($telegram);
+        break;
+    case 'set-web-hook':
+        setWebHook($telegram, $config);
+        break;
+    case 'remove-web-hook':
+        removeWebHook($telegram);
         break;
     default:
         echo "Unknown action";
@@ -43,4 +49,18 @@ function sendMessage($telegram) {
         'ok'      => true,
         'message' => 'Message sent',
     ]);
+}
+
+function setWebHook($telegram, $config) {
+    $response = $telegram->setWebhook([
+        'url' => $config['telegram']['webhook']['url']
+    ]);
+
+    echo $response === true ? "OK" : "Error!";
+}
+
+function removeWebHook($telegram) {
+    $response = $telegram->removeWebHook();
+
+    echo $response === true ? "OK" : "Error!";
 }
