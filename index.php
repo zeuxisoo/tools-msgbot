@@ -93,6 +93,10 @@ body {
                         this.alert.show    = true;
                         this.alert.ok      = data.ok;
                         this.alert.message = data.message;
+
+                        setTimeout(() => {
+                            this.alert.show = false
+                        }, 2000);
                     })
                     .catch(error => {
                         alert('Cannot send message, Got unknown error');
