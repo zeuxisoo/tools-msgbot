@@ -1,6 +1,9 @@
 <?php
 require_once dirname(__FILE__).'/vendor/autoload.php';
 
+// Import
+use Telegram\Bot\Api;
+
 // Refill
 $_POST = json_decode(file_get_contents("php://input"), true);
 
@@ -12,7 +15,9 @@ function getRequest($name) {
 }
 
 // Global variables
-$action = getRequest('action');
+$config   = require_once dirname(__FILE__).'/config.php';
+$telegram = new Api($config['telegram']['token']);
+$action   = getRequest('action');
 
 // Flow
 switch($action) {
@@ -28,6 +33,8 @@ switch($action) {
 function sendMessage() {
     $chatId  = getRequest('chatId');
     $message = getRequest('message');
+
+    // TODO: send message to chatId with message
 
     echo json_encode([
         'ok'      => true,
