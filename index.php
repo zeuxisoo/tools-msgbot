@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <style>
 body {
     font-family: 'Noto Sans', sans-serif;
@@ -43,25 +44,59 @@ body {
                 </div>
             </div>
         </div>
+
+        <div v-if="alert.show">
+            <hr>
+
+            <div class="alert"
+                role="alert"
+                v-bind:class="{
+                    'alert-success': alert.ok,
+                    'alert-danger' : !alert.ok
+                }">
+                {{alert.message}}
+            </div>
+        </div>
     </div>
 </div>
 <script>
 (function() {
 
-    var app = new Vue({
+    const getApiURL = action => `api.php?action=${action}`;
+
+    const app = new Vue({
         el: '#app',
 
         data() {
             return {
                 chatId : "",
-                message: ""
+                message: "",
+
+                alert: {
+                    show   : false,
+                    ok     : true,
+                    message: ""
+                }
             }
         },
 
         methods: {
             sendMessage() {
-                console.log(this.chatId);
-                console.log(this.message);
+                axios
+                    .post(getApiURL('send-message'), {
+                        chatId : this.chatId,
+                        message: this.message,
+                    })
+                    .then(response => {
+                        const data = response.data;
+
+                        this.alert.show    = true;
+                        this.alert.ok      = data.ok;
+                        this.alert.message = data.message;
+                    })
+                    .catch(error => {
+                        alert('Cannot send message, Got unknown error');
+                    });
             }
         }
     });
