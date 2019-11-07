@@ -1,6 +1,7 @@
 <?php
 return [
     'telegram' => [
-        'token' => '',
+        'token'    => '',
+        'web_hook' => false,
     ]
 ];
