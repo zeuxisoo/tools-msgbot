@@ -23,3 +23,12 @@ Edit the config file
 2. Set the webhook enable when using in production mode
 3. Set the webhook url to your full domain url when webhook is enabled
 
+## Action
+
+1. Enable webhook on bot
+
+		api.php?action=set-web-hook
+		
+2. Remove webhhok on bot
+
+		api.php?action=remove-web-hook
